@@ -51,9 +51,10 @@ export default function Riesgos() {
     setIaLoading(true);
     try {
       const criticos = riesgos.filter((r) => r.nivelRiesgo >= 12).map((r) => `- ${r.nombre} (P:${r.probabilidad} x I:${r.impacto} = ${r.nivelRiesgo}): ${r.descripcion}`).join("\n");
-      const { data } = await generarDocumento("PROGRAMA_RIESGOS_CRITICOS", `Riesgos críticos identificados:\n${criticos}`);
-      setIaContenido(data.contenido);
-      setIaModal(true);
+      const resultado = await generarDocumento("PROGRAMA_RIESGOS_CRITICOS", `Riesgos críticos identificados:\n${criticos}`);
+      alert(`✅ Documento generado exitosamente: ${resultado.filename}. El PDF se ha descargado automáticamente y se ha guardado en la base de datos.`);
+      // Recargar la lista de documentos
+      await cargar();
     } catch {
       alert("Error al generar con IA");
     } finally {

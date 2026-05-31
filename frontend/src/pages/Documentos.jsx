@@ -70,10 +70,11 @@ export default function Documentos() {
   const handleGenerarIA = async () => {
     setIaLoading(true);
     try {
-      const { data } = await generarDocumento(tipoIA);
-      setIaContenido(data.contenido);
+      const resultado = await generarDocumento(tipoIA);
+      alert(`✅ Documento generado exitosamente: ${resultado.filename}. El PDF se ha descargado automáticamente y se ha guardado en la base de datos.`);
       setModalIA(false);
-      setIaModal(true);
+      // Recargar la lista de documentos
+      await cargar();
     } catch {
       alert("Error al generar con IA. Verifica tu clave API.");
     } finally {

@@ -1,4 +1,7 @@
 const genAI = require("../../config/claude");
+const PDFDocument = require("pdfkit");
+const fs = require("fs");
+const path = require("path");
 
 const SYSTEM_PESV = `Eres un experto en el Plan Estratégico de Seguridad Vial (PESV) de Colombia, con dominio total de la Resolución 40595 de 2022 del Ministerio de Transporte. La empresa se llama TransCor S.A.S., tiene 25 conductores, 18 vehículos, nivel PESV Estándar, sede en Montería, Córdoba. Genera documentos formales en español, listos para ser usados por el líder PESV. Usa formato profesional con numeración de secciones, fechas del año en curso y referencias exactas a artículos de la resolución.`;
 
@@ -81,4 +84,48 @@ const generarInformeEjecutivo = async (contexto) => {
   return generarDocumento("INFORME_EJECUTIVO", contexto);
 };
 
-module.exports = { generarDocumento, investigarIncidente, consultaNormativa, generarInformeEjecutivo };
+const generarPDF = async (texto, nombreArchivo) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const doc = new PDFDocument({ margin: 50, size: 'letter' });
+      const chunks = [];
+
+      doc.on('data', chunk => chunks.push(chunk));
+      doc.on('end', () => resolve(Buffer.concat(chunks)));
+      doc.on('error', reject);
+
+      // Configurar fuente para español
+      doc.font('Helvetica');
+
+      // Título
+      doc.fontSize(16)
+         .font('Helvetica-Bold')
+         .text(nombreArchivo || 'Documento PESV', { align: 'center' })
+         .moveDown();
+
+      // Fecha
+      doc.fontSize(10)
+         .font('Helvetica')
+         .text(`Fecha: ${new Date().toLocaleDateString('es-CO')}`, { align: 'right' })
+         .moveDown();
+
+      // Contenido - dividir en líneas para mejor manejo
+      const lines = texto.split('\n');
+      doc.fontSize(11)
+         .font('Helvetica');
+      
+      lines.forEach(line => {
+        doc.text(line, {
+          align: 'justify',
+          lineGap: 6
+        });
+      });
+
+      doc.end();
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
+module.exports = { generarDocumento, investigarIncidente, consultaNormativa, generarInformeEjecutivo, generarPDF };

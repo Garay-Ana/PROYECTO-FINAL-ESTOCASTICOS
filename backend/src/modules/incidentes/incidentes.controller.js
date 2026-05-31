@@ -54,13 +54,28 @@ const estadisticas = async (req, res, next) => {
     // Agrupar por mes en JS
     const mesNombres = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
     const mesesMap = {};
+
+    // Inicializar los últimos 6 meses con ceros
+    for (let i = 5; i >= 0; i--) {
+      const fecha = new Date(hoy.getFullYear(), hoy.getMonth() - i, 1);
+      const key = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, "0")}`;
+      mesesMap[key] = { 
+        mes: mesNombres[fecha.getMonth()], 
+        accidentes: 0, 
+        casi_accidentes: 0, 
+        total: 0 
+      };
+    }
+
+    // Contar incidentes por mes
     todos.forEach((inc) => {
       const d = new Date(inc.fecha);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-      if (!mesesMap[key]) mesesMap[key] = { mes: mesNombres[d.getMonth()], accidentes: 0, casi_accidentes: 0, total: 0 };
-      if (inc.tipo.startsWith("ACCIDENTE")) mesesMap[key].accidentes++;
-      else if (inc.tipo === "CASI_ACCIDENTE") mesesMap[key].casi_accidentes++;
-      mesesMap[key].total++;
+      if (mesesMap[key]) {
+        if (inc.tipo.startsWith("ACCIDENTE")) mesesMap[key].accidentes++;
+        else if (inc.tipo === "CASI_ACCIDENTE") mesesMap[key].casi_accidentes++;
+        mesesMap[key].total++;
+      }
     });
 
     // Contar por tipo

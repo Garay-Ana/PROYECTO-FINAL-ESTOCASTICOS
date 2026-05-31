@@ -39,6 +39,7 @@ const kpis = async (req, res, next) => {
 
 const accidentalidad = async (req, res, next) => {
   try {
+    const hoy = new Date();
     const hace6meses = new Date();
     hace6meses.setMonth(hace6meses.getMonth() - 6);
 
@@ -48,15 +49,28 @@ const accidentalidad = async (req, res, next) => {
       orderBy: { fecha: "asc" },
     });
 
-    const meses = {};
     const mesNombres = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+    const meses = {};
 
+    // Inicializar los últimos 6 meses con ceros
+    for (let i = 5; i >= 0; i--) {
+      const fecha = new Date(hoy.getFullYear(), hoy.getMonth() - i, 1);
+      const key = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, "0")}`;
+      meses[key] = { 
+        mes: mesNombres[fecha.getMonth()], 
+        accidentes: 0, 
+        casiAccidentes: 0 
+      };
+    }
+
+    // Contar incidentes por mes
     incidentes.forEach((inc) => {
       const d = new Date(inc.fecha);
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-      if (!meses[key]) meses[key] = { mes: mesNombres[d.getMonth()], accidentes: 0, casiAccidentes: 0 };
-      if (inc.tipo.startsWith("ACCIDENTE")) meses[key].accidentes++;
-      else if (inc.tipo === "CASI_ACCIDENTE") meses[key].casiAccidentes++;
+      if (meses[key]) {
+        if (inc.tipo.startsWith("ACCIDENTE")) meses[key].accidentes++;
+        else if (inc.tipo === "CASI_ACCIDENTE") meses[key].casiAccidentes++;
+      }
     });
 
     res.json(Object.values(meses));

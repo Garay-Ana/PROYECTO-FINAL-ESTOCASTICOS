@@ -1,15 +1,24 @@
 import { useState, useRef, useEffect } from "react";
-import { Plus, Send, Shield, User, MessageSquare, Trash2 } from "lucide-react";
-import { consultaNormativa } from "../services/ia.service";
+import { Plus, Send, Shield, User, MessageSquare, Trash2, Download } from "lucide-react";
+import { consultaNormativa, generarDocumento } from "../services/ia.service";
 
 const SUGERENCIAS = [
   "¿Cuáles son los 24 pasos del PESV según la Resolución 40595?",
-  "Genera una política de seguridad vial para TransCor S.A.S.",
+  "Generar política de seguridad vial (PDF)",
   "¿Qué exige la Resolución 40595 sobre capacitación de conductores?",
   "¿Cómo calcular los indicadores del Paso 20?",
-  "Genera un acta de comité PESV de esta semana",
+  "Generar acta de comité PESV (PDF)",
   "¿Qué sanciones aplican por incumplir el PESV en Colombia?",
 ];
+
+const MAPEO_DOCUMENTOS = {
+  "política de seguridad vial": "POLITICA_SEGURIDAD_VIAL",
+  "política integrada": "POLITICA_SGSST",
+  "procedimiento de riesgos": "PROCEDIMIENTO_RIESGOS",
+  "acta de comité": "ACTA_COMITE",
+  "programa de riesgos críticos": "PROGRAMA_RIESGOS_CRITICOS",
+  "indicadores": "INDICADORES_PASO20",
+};
 
 const idNuevo = () => `chat_${Date.now()}`;
 
@@ -45,6 +54,16 @@ export default function AsistenteIA() {
     if (!msg || loading) return;
     setInput("");
 
+    // Detectar si el usuario quiere generar un documento
+    const textoLower = msg.toLowerCase();
+    let tipoDocumento = null;
+    for (const [clave, valor] of Object.entries(MAPEO_DOCUMENTOS)) {
+      if (textoLower.includes(clave)) {
+        tipoDocumento = valor;
+        break;
+      }
+    }
+
     const nuevosMensajes = [...mensajes, { role: "user", content: msg }];
 
     setChats((prev) => prev.map((c) => {
@@ -55,13 +74,30 @@ export default function AsistenteIA() {
 
     setLoading(true);
     try {
-      const historial = nuevosMensajes.map((m) => ({ role: m.role, content: m.content }));
-      const { data } = await consultaNormativa(historial);
+      if (tipoDocumento) {
+        // Generar documento PDF
+        const resultado = await generarDocumento(tipoDocumento, "");
+        setChats((prev) => prev.map((c) => {
+          if (c.id !== chatActivo) return c;
+          return { 
+            ...c, 
+            mensajes: [...nuevosMensajes, { 
+              role: "assistant", 
+              content: `✅ Documento generado exitosamente: ${resultado.filename}. El PDF se ha descargado automáticamente.`,
+              isDownload: true 
+            }] 
+          };
+        }));
+      } else {
+        // Consulta normativa normal
+        const historial = nuevosMensajes.map((m) => ({ role: m.role, content: m.content }));
+        const { data } = await consultaNormativa(historial);
 
-      setChats((prev) => prev.map((c) => {
-        if (c.id !== chatActivo) return c;
-        return { ...c, mensajes: [...nuevosMensajes, { role: "assistant", content: data.respuesta }] };
-      }));
+        setChats((prev) => prev.map((c) => {
+          if (c.id !== chatActivo) return c;
+          return { ...c, mensajes: [...nuevosMensajes, { role: "assistant", content: data.respuesta }] };
+        }));
+      }
     } catch (err) {
       const serverError = err.response?.data?.error || "";
       let errMsg;

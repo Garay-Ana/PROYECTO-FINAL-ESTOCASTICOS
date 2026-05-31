@@ -67,9 +67,10 @@ export default function Dashboard() {
   const handleInformeIA = async () => {
     setIaLoading(true);
     try {
-      const { data } = await generarInformeEjecutivo();
-      setIaContenido(data.contenido);
-      setIaModal(true);
+      const resultado = await generarInformeEjecutivo();
+      alert(`✅ Informe generado exitosamente: ${resultado.filename}. El PDF se ha descargado automáticamente y se ha guardado en la base de datos.`);
+      // Recargar los datos del dashboard
+      await cargar();
     } catch {
       alert("Error al generar informe. Verifica tu clave API.");
     } finally {
