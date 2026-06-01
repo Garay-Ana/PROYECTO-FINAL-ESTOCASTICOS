@@ -75,8 +75,9 @@ export default function Documentos() {
       setModalIA(false);
       // Recargar la lista de documentos
       await cargar();
-    } catch {
-      alert("Error al generar con IA. Verifica tu clave API.");
+    } catch (error) {
+      console.error("Error al generar documento:", error);
+      alert(`Error al generar con IA: ${error.message || error}`);
     } finally {
       setIaLoading(false);
     }

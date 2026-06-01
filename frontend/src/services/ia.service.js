@@ -2,7 +2,8 @@ import api from "./api";
 
 export const generarDocumento = async (tipo, contexto) => {
   const response = await api.post("/ia/generar-documento", { tipo, contexto }, {
-    responseType: 'blob'
+    responseType: 'blob',
+    timeout: 120000 // Aumentar el timeout a 120 segundos
   });
   
   // Crear URL para descargar el PDF

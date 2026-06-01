@@ -102,7 +102,6 @@ export default function Dashboard() {
         subtitle={`${hoy} · TransCor S.A.S.`}
         alertCount={alertas.filter((a) => !a.leida).length}
         onMenuToggle={() => setMenuOpen((v) => !v)}
-        actions={!isGerente() && <ClaudeButton onClick={handleInformeIA} loading={iaLoading} label="Informe Ejecutivo" />}
       />
 
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
