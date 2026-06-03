@@ -23,42 +23,61 @@ export default function Homepage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const allPESVSteps = [
+    // FASE 1 — Planificación del PESV
+    { number: 1, description: 'Líder del diseño e implementación del PESV', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+    { number: 2, description: 'Comité de seguridad vial', levels: ['estandar', 'avanzado'], phase: 1 },
+    { number: 3, description: 'Política de Seguridad Vial de la organización', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+    { number: 4, description: 'Liderazgo, compromiso y corresponsabilidad directiva', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+    { number: 5, description: 'Diagnóstico', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+    { number: 6, description: 'Caracterización, evaluación y control de riesgos', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+    { number: 7, description: 'Objetivos y metas del PESV', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+    { number: 8, description: 'Programas de gestión de riesgos críticos', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+    // FASE 2 — Implementación y Ejecución del PESV
+    { number: 9, description: 'Plan anual de trabajo', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+    { number: 10, description: 'Competencia y plan anual de formación', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+    { number: 11, description: 'Responsabilidad y comportamiento seguro', levels: ['avanzado'], phase: 2 },
+    { number: 12, description: 'Plan de preparación y respuesta ante emergencias', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+    { number: 13, description: 'Investigación interna de siniestros viales', levels: ['estandar', 'avanzado'], phase: 2 },
+    { number: 14, description: 'Vías seguras administradas por la organización', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+    { number: 15, description: 'Planificación de desplazamientos laborales', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+    { number: 16, description: 'Inspección de vehículos y equipos', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+    { number: 17, description: 'Mantenimiento y control de vehículos seguros', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+    { number: 18, description: 'Gestión del cambio y gestión de contratistas', levels: ['estandar', 'avanzado'], phase: 2 },
+    { number: 19, description: 'Archivo y retención documental', levels: ['estandar', 'avanzado'], phase: 2 },
+    // FASE 3 — Seguimiento por la Organización
+    { number: 20, description: 'Indicadores y reporte de autogestión PESV', levels: ['basico', 'estandar', 'avanzado'], phase: 3 },
+    { number: 21, description: 'Registro y análisis estadístico de siniestros viales', levels: ['avanzado'], phase: 3 },
+    { number: 22, description: 'Auditoría anual', levels: ['basico', 'estandar', 'avanzado'], phase: 3 },
+    // FASE 4 — Mejora Continua del PESV
+    { number: 23, description: 'Mejora continua, acciones preventivas y correctivas', levels: ['basico', 'estandar', 'avanzado'], phase: 4 },
+    { number: 24, description: 'Mecanismos de comunicación y participación', levels: ['basico', 'estandar', 'avanzado'], phase: 4 }
+  ];
+
   const maturityLevels = [
     {
       level: 'Nivel Básico',
       steps: '18 pasos esenciales',
       color: 'from-blue-400 to-blue-600',
       icon: Shield,
-      items: [
-        'Política de seguridad',
-        'Diagnóstico inicial',
-        'Capacitación básica',
-        'Auditorías anuales'
-      ]
+      levelKey: 'basico',
+      items: allPESVSteps.filter(step => step.levels.includes('basico')).slice(0, 4).map(step => `Paso ${step.number}: ${step.description}`)
     },
     {
       level: 'Nivel Estándar',
       steps: '22 pasos',
       color: 'from-cyan-400 to-blue-500',
       icon: Users,
-      items: [
-        'Comité de Seguridad Vial',
-        'Gestión de contratistas',
-        'Investigación de siniestros',
-        'Evaluación de riesgos'
-      ]
+      levelKey: 'estandar',
+      items: allPESVSteps.filter(step => step.levels.includes('estandar')).slice(0, 4).map(step => `Paso ${step.number}: ${step.description}`)
     },
     {
       level: 'Nivel Avanzado',
       steps: '24 pasos completos',
       color: 'from-indigo-400 to-indigo-600',
       icon: TrendingUp,
-      items: [
-        'Registro estadístico',
-        'Comunicación avanzada',
-        'Participación organizacional',
-        'Mejora continua'
-      ]
+      levelKey: 'avanzado',
+      items: allPESVSteps.filter(step => step.levels.includes('avanzado')).slice(0, 4).map(step => `Paso ${step.number}: ${step.description}`)
     }
   ];
 
@@ -153,7 +172,7 @@ export default function Homepage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-4">
-              ¿Qué es la Resolución 40595?
+              ¿Qué es la Resolución 40595 2022?
             </h2>
             <div className="h-1 w-24 bg-gradient-to-r from-blue-500 to-cyan-400 mx-auto"></div>
           </div>

@@ -1,6 +1,37 @@
 import React, { useEffect } from 'react';
 import { X, CheckCircle2, Shield, Users, TrendingUp } from 'lucide-react';
 
+const allPESVSteps = [
+  // FASE 1 — Planificación del PESV
+  { number: 1, description: 'Líder del diseño e implementación del PESV', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+  { number: 2, description: 'Comité de seguridad vial', levels: ['estandar', 'avanzado'], phase: 1 },
+  { number: 3, description: 'Política de Seguridad Vial de la organización', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+  { number: 4, description: 'Liderazgo, compromiso y corresponsabilidad directiva', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+  { number: 5, description: 'Diagnóstico', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+  { number: 6, description: 'Caracterización, evaluación y control de riesgos', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+  { number: 7, description: 'Objetivos y metas del PESV', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+  { number: 8, description: 'Programas de gestión de riesgos críticos', levels: ['basico', 'estandar', 'avanzado'], phase: 1 },
+  // FASE 2 — Implementación y Ejecución del PESV
+  { number: 9, description: 'Plan anual de trabajo', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+  { number: 10, description: 'Competencia y plan anual de formación', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+  { number: 11, description: 'Responsabilidad y comportamiento seguro', levels: ['avanzado'], phase: 2 },
+  { number: 12, description: 'Plan de preparación y respuesta ante emergencias', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+  { number: 13, description: 'Investigación interna de siniestros viales', levels: ['estandar', 'avanzado'], phase: 2 },
+  { number: 14, description: 'Vías seguras administradas por la organización', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+  { number: 15, description: 'Planificación de desplazamientos laborales', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+  { number: 16, description: 'Inspección de vehículos y equipos', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+  { number: 17, description: 'Mantenimiento y control de vehículos seguros', levels: ['basico', 'estandar', 'avanzado'], phase: 2 },
+  { number: 18, description: 'Gestión del cambio y gestión de contratistas', levels: ['estandar', 'avanzado'], phase: 2 },
+  { number: 19, description: 'Archivo y retención documental', levels: ['estandar', 'avanzado'], phase: 2 },
+  // FASE 3 — Seguimiento por la Organización
+  { number: 20, description: 'Indicadores y reporte de autogestión PESV', levels: ['basico', 'estandar', 'avanzado'], phase: 3 },
+  { number: 21, description: 'Registro y análisis estadístico de siniestros viales', levels: ['avanzado'], phase: 3 },
+  { number: 22, description: 'Auditoría anual', levels: ['basico', 'estandar', 'avanzado'], phase: 3 },
+  // FASE 4 — Mejora Continua del PESV
+  { number: 23, description: 'Mejora continua, acciones preventivas y correctivas', levels: ['basico', 'estandar', 'avanzado'], phase: 4 },
+  { number: 24, description: 'Mecanismos de comunicación y participación', levels: ['basico', 'estandar', 'avanzado'], phase: 4 }
+];
+
 const LEVEL_DATA = {
   basico: {
     title: 'Nivel Básico',
@@ -9,26 +40,7 @@ const LEVEL_DATA = {
     gradient: 'from-blue-400 to-blue-600',
     icon: Shield,
     description: 'Obligatorio para flotas entre 10 y 50 vehículos. Enfocado en gestión fundamental.',
-    items: [
-      'Líder del diseño e implementación del PESV',
-      'Política de Seguridad Vial',
-      'Liderazgo y compromiso directivo',
-      'Diagnóstico',
-      'Caracterización, evaluación y control de riesgos',
-      'Objetivos y metas',
-      'Programas de gestión de riesgos críticos',
-      'Plan anual de trabajo',
-      'Competencia y plan anual de formación',
-      'Plan de preparación y respuesta ante emergencias',
-      'Vías seguras administradas',
-      'Planificación de desplazamientos laborales',
-      'Inspección de vehículos y equipos',
-      'Mantenimiento y control de vehículos',
-      'Indicadores y reporte de autogestión',
-      'Auditoría anual',
-      'Mejora continua',
-      'Mecanismos de comunicación y participación'
-    ]
+    items: allPESVSteps.filter(step => step.levels.includes('basico'))
   },
   estandar: {
     title: 'Nivel Estándar',
@@ -37,31 +49,7 @@ const LEVEL_DATA = {
     gradient: 'from-cyan-400 to-blue-500',
     icon: Users,
     description: 'Para organizaciones de mayor complejidad o riesgo medio-alto.',
-    items: [
-      'Líder del diseño e implementación del PESV',
-      'Política de Seguridad Vial',
-      'Liderazgo y compromiso directivo',
-      'Diagnóstico',
-      'Caracterización, evaluación y control de riesgos',
-      'Objetivos y metas',
-      'Programas de gestión de riesgos críticos',
-      'Plan anual de trabajo',
-      'Competencia y plan anual de formación',
-      'Plan de preparación y respuesta ante emergencias',
-      'Vías seguras administradas',
-      'Planificación de desplazamientos laborales',
-      'Inspección de vehículos y equipos',
-      'Mantenimiento y control de vehículos',
-      'Indicadores y reporte de autogestión',
-      'Auditoría anual',
-      'Mejora continua',
-      'Mecanismos de comunicación y participación',
-      'Comité de seguridad vial',
-      'Investigación interna de siniestros viales',
-      'Gestión del cambio y gestión de contratistas',
-      'Archivo y retención documental'
-    ],
-    newStepsStart: 18
+    items: allPESVSteps.filter(step => step.levels.includes('estandar'))
   },
   avanzado: {
     title: 'Nivel Avanzado',
@@ -70,33 +58,7 @@ const LEVEL_DATA = {
     gradient: 'from-indigo-400 to-indigo-600',
     icon: TrendingUp,
     description: 'Para organizaciones de alto riesgo o gran tamaño.',
-    items: [
-      'Líder del diseño e implementación del PESV',
-      'Política de Seguridad Vial',
-      'Liderazgo y compromiso directivo',
-      'Diagnóstico',
-      'Caracterización, evaluación y control de riesgos',
-      'Objetivos y metas',
-      'Programas de gestión de riesgos críticos',
-      'Plan anual de trabajo',
-      'Competencia y plan anual de formación',
-      'Plan de preparación y respuesta ante emergencias',
-      'Vías seguras administradas',
-      'Planificación de desplazamientos laborales',
-      'Inspección de vehículos y equipos',
-      'Mantenimiento y control de vehículos',
-      'Indicadores y reporte de autogestión',
-      'Auditoría anual',
-      'Mejora continua',
-      'Mecanismos de comunicación y participación',
-      'Comité de seguridad vial',
-      'Investigación interna de siniestros viales',
-      'Gestión del cambio y gestión de contratistas',
-      'Archivo y retención documental',
-      'Responsabilidad y comportamiento seguro',
-      'Registro y análisis estadístico de siniestros viales'
-    ],
-    newStepsStart: 22
+    items: allPESVSteps.filter(step => step.levels.includes('avanzado'))
   }
 };
 
@@ -164,10 +126,9 @@ export default function PESVLevelModal({ isOpen, onClose, level }) {
             <div className="bg-slate-50 rounded-xl p-6">
               <h3 className="text-lg font-bold text-gray-900 mb-4">Pasos a implementar:</h3>
               <div className="space-y-3">
-                {data.items.map((item, index) => {
-                  const isNew = data.newStepsStart && index >= data.newStepsStart;
+                {data.items.map((step, index) => {
                   return (
-                    <div key={index} className="flex gap-3 items-start">
+                    <div key={step.number} className="flex gap-3 items-start">
                       <div className="flex-shrink-0">
                         <CheckCircle2 
                           className="w-5 h-5 mt-0.5" 
@@ -176,13 +137,8 @@ export default function PESVLevelModal({ isOpen, onClose, level }) {
                       </div>
                       <div className="flex-1">
                         <p className="text-gray-700 text-sm leading-relaxed">
-                          <span className="font-semibold text-gray-900">{index + 1}.</span> {item}
+                          <span className="font-semibold text-gray-900">Paso {step.number}:</span> {step.description}
                         </p>
-                        {isNew && (
-                          <span className="inline-block mt-1 px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">
-                            Nuevo
-                          </span>
-                        )}
                       </div>
                     </div>
                   );
@@ -201,14 +157,15 @@ export default function PESVLevelModal({ isOpen, onClose, level }) {
                   <>
                     <li>✓ Obligatorio para organizaciones con flotas entre 10 y 50 vehículos</li>
                     <li>✓ Se enfoca en la gestión fundamental de seguridad vial</li>
-                    <li>✓ Incluye políticas, capacitación, inspección de vehículos y auditoría anual</li>
+                    <li>✓ Omite pasos: 2, 11, 13, 18, 19 y 21</li>
+                    <li>✓ Total: 18 pasos</li>
                   </>
                 )}
                 {level === 'estandar' && (
                   <>
                     <li>✓ Para organizaciones de mayor complejidad o riesgo medio-alto</li>
                     <li>✓ Incluye los 18 pasos del Nivel Básico más 4 adicionales</li>
-                    <li>✓ Agrega estructura organizacional y gestión de terceros</li>
+                    <li>✓ Omite pasos: 11 y 21</li>
                     <li>✓ Total: 22 pasos</li>
                   </>
                 )}
@@ -216,7 +173,7 @@ export default function PESVLevelModal({ isOpen, onClose, level }) {
                   <>
                     <li>✓ Para organizaciones de alto riesgo o gran tamaño</li>
                     <li>✓ Incluye los 22 pasos del Nivel Estándar más 2 adicionales</li>
-                    <li>✓ Enfocado en cultura profunda y análisis estadístico</li>
+                    <li>✓ Aplica los 24 pasos completos de la Resolución 40595</li>
                     <li>✓ Total: 24 pasos</li>
                   </>
                 )}
